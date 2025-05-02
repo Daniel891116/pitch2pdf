@@ -25,7 +25,7 @@ def capture_all_slides(pitch_url, chromedriver_path, max_slides=50):
     chrome_options.add_argument("--headless=new")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--window-size=1920,1283")
     chrome_options.add_argument("--autoplay-policy=no-user-gesture-required")  # Allow video autoplay
 
     # Launch driver
@@ -92,6 +92,11 @@ def capture_all_slides(pitch_url, chromedriver_path, max_slides=50):
         slide_path = os.path.join(output_folder, f"slide_{i + 1:03d}.png")
         driver.save_screenshot(slide_path)
         image_paths.append(slide_path)
+
+        # Crop the screenshot to the slide area
+        slide_image = Image.open(slide_path)
+        slide_image = slide_image.crop((0, 0, 1920, 1080))
+        slide_image.save(slide_path)
 
         prev_hash = current_hash
 
